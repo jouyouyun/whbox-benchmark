@@ -78,20 +78,28 @@
 ** Run
 + Build
 
-~env GO111MODULE="off" go build -o whbox-benchmark ./cmd/whbox-benchmark/main.go~
+  #+begin_src shell
+  env GO111MODULE="off" make
+  #+end_src
 
 + Run
 
-~./whbox-benchmark -action benchmark -alg xiao -key '123456789abdeafd123efcb123098aab' -dir /tmp/shm -block 'c03fcc5ca7333a6309e2ed7e5e2870a6'~
+  #+begin_src shell
+  ./whbox-benchmark -action benchmark -alg xiao -key '123456789abdeafd123efcb123098aab' \
+  -dir /tmp/shm -block 'c03fcc5ca7333a6309e2ed7e5e2870a6'
+  #+end_src
 
 + Help
 
-~./whbox-benchmark -h~
+  #+begin_src shell
+  ./whbox-benchmark -h
+  #+end_src
 
 ** Benchmark
 *** xiao-aes
 #+begin_src shell
-$ ./whbox-benchmark -action benchmark -alg xiao -key '123456789abdeafd123efcb123098aab' -dir /tmp/shm -block 'c03fcc5ca7333a6309e2ed7e5e2870a6'
+$ ./whbox-benchmark -action benchmark -alg xiao -key '123456789abdeafd123efcb123098aab' \
+-dir /tmp/shm -block 'c03fcc5ca7333a6309e2ed7e5e2870a6'
 Generate key duration: 38.233044133s
 Benchmark: key(123456789abdeafd123efcb123098aab), block(c03fcc5ca7333a6309e2ed7e5e2870a6)
 Encryption:
@@ -118,7 +126,8 @@ Decryption:
 
 *** chow-aes
 #+begin_src shell
-$ ./whbox-benchmark -action benchmark -alg chow -key '123456789abdeafd123efcb123098aab' -dir /tmp/shm -block 'c03fcc5ca7333a6309e2ed7e5e2870a6'
+$ ./whbox-benchmark -action benchmark -alg chow -key '123456789abdeafd123efcb123098aab' \
+-dir /tmp/shm -block 'c03fcc5ca7333a6309e2ed7e5e2870a6'
 Generate key duration: 538.210333ms
 Benchmark: key(123456789abdeafd123efcb123098aab), block(c03fcc5ca7333a6309e2ed7e5e2870a6)
 Encryption:
