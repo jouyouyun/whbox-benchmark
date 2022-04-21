@@ -1,0 +1,144 @@
+# % Options Settings: https://orgmode.org/manual/Export-Settings.html
+#+OPTIONS: timestamp:nil ^:nil <:nil p:t prop:t tags:t tasks:t todo:t
+#+LATEX_CLASS: article
+#+LaTeX_CLASS_OPTIONS: [a4paper,12pt]
+#+LATEX_HEADER: \usepackage{booktabs}
+# % to include pdf/eps/png files
+#+LATEX_HEADER: \usepackage{indentfirst}
+#+LATEX_HEADER: \usepackage{graphicx}
+# % useful to add 'todo' markers
+#+LaTeX_HEADER: \usepackage{todonotes}
+#+LaTeX_HEADER: \setlength{\marginparwidth}{2cm} % fix todonotes warning
+# % hyperrefs
+#+LaTeX_HEADER: \usepackage{hyperref}
+# % ----------------- Code blocks ----------------
+# % Dependencies: pip install pygments
+# % nice source code formatting
+#+LaTeX_HEADER: \usepackage{xcolor}
+#+LaTeX_HEADER: \definecolor{bg}{rgb}{0.98,0.98,0.98}
+#+LaTeX_HEADER: \usepackage[cache=false]{minted}
+#+LaTeX_HEADER: \setminted{
+#+LaTeX_HEADER:   fontsize=\small,
+#+LaTeX_HEADER:   baselinestretch=1,
+#+LaTeX_HEADER:   xleftmargin=4em,
+#+LaTeX_HEADER:   breaklines,
+#+LaTeX_HEADER:   mathescape,
+#+LaTeX_HEADER:   linenos,
+#+LaTeX_HEADER:   numbersep=5pt,
+#+LaTeX_HEADER:   frame=leftline,
+#+LaTeX_HEADER:   framesep=2mm,
+#+LaTeX_HEADER:   autogobble,
+#+LaTeX_HEADER:   style=tango,
+#+LaTeX_HEADER:   bgcolor=bg
+#+LaTeX_HEADER: }
+# % change style of section headings
+#+LaTeX_HEADER: \usepackage{sectsty}
+#+LaTeX_HEADER: \allsectionsfont{\sffamily}
+# % only required for orgmode ticked TODO items, can remove
+#+LaTeX_HEADER: \usepackage{amssymb}
+# % only required for underlining text
+#+LaTeX_HEADER: \usepackage[normalem]{ulem}
+# % often use this in differential operators:
+#+LaTeX_HEADER: \renewcommand{\d}{\ensuremath{\mathrm{d}}}
+# % allow more reasonable text width for most documents than LaTeX default
+#+LaTeX_HEADER: \setlength{\textheight}{21cm}
+#+LaTeX_HEADER: \setlength{\textwidth}{16cm}
+# % reduce left and right margins accordingly
+#+LaTeX_HEADER: \setlength{\evensidemargin}{-0cm}
+#+LaTeX_HEADER: \setlength{\oddsidemargin}{-0cm}
+# % reduce top margin
+#+LaTeX_HEADER: \setlength{\topmargin}{0cm}
+# % references formats
+#+LaTeX_HEADER: \usepackage[round]{natbib}
+# % Chinese supported
+#+LATEX_HEADER: \usepackage{ctex}
+# % Increase default line spacing a little
+#+LATEX_HEADER: \usepackage{setspace}
+#+LATEX_HEADER: \renewcommand{\baselinestretch}{1.5}
+#+LATEX_HEADER: \setlength{\parskip}{0.8em}
+# % Line & paragraph space end
+# % item list margin
+#+LATEX_HEADER: \usepackage{enumitem}
+# % Breaking Page Between Title and Toc
+#+LATEX_HEADER: \makeatletter \def\@maketitle{\null \begin{center} {\vskip 5em \Huge \@title} \vskip 30em {\LARGE \@author} \vskip 3em {\LARGE \@date} \end{center} \newpage} \makeatother
+# % End of Breaking Page Between Title and Toc
+#+LATEX_HEADER: \renewcommand\contentsname{目录}
+# Generate Tex File: C-c C-e l l; then replace verbatim with minted, and must special the code language
+#+LATEX_HEADER: % Generate PDF: xelatex -shell-escape <tex file>
+#+AUTHOR: jouyouyun
+#+EMAIL: yanbowen717@gmail.com
+#+TITLE: 白盒算法性能测试
+#+latex: \newpage
+
+** Dependecies
++ [[https://github.com/OpenWhiteBox/primitives][github.com/OpenWhiteBox/primitives]]
++ [[https://github.com/OpenWhiteBox/AES][github.com/OpenWhiteBox/AES]]
++ [[https://github.com/OpenWhiteBox/Generic][github.com/OpenWhiteBox/Generic]]
+
+** Run
++ Build
+
+~env GO111MODULE="off" go build -o whbox-benchmark ./cmd/whbox-benchmark/main.go~
+
++ Run
+
+~./whbox-benchmark -action benchmark -alg xiao -key '123456789abdeafd123efcb123098aab' -dir /tmp/shm -block 'c03fcc5ca7333a6309e2ed7e5e2870a6'~
+
++ Help
+
+~./whbox-benchmark -h~
+
+** Benchmark
+*** xiao-aes
+#+begin_src shell
+$ ./whbox-benchmark -action benchmark -alg xiao -key '123456789abdeafd123efcb123098aab' -dir /tmp/shm -block 'c03fcc5ca7333a6309e2ed7e5e2870a6'
+Generate key duration: 38.233044133s
+Benchmark: key(123456789abdeafd123efcb123098aab), block(c03fcc5ca7333a6309e2ed7e5e2870a6)
+Encryption:
+        [0]
+                [WHBox] Duration: 108.468µs,    Cipher: 68bc604c65c819b5db9d0c7216d0594f
+                [AES] Duration:   2.23µs,       Cipher: 68bc604c65c819b5db9d0c7216d0594f
+        [1]
+                [WHBox] Duration: 81.872µs,     Cipher: 68bc604c65c819b5db9d0c7216d0594f
+                [AES] Duration:   320ns,        Cipher: 68bc604c65c819b5db9d0c7216d0594f
+        [2]
+                [WHBox] Duration: 103.663µs,    Cipher: 68bc604c65c819b5db9d0c7216d0594f
+                [AES] Duration:   279ns,        Cipher: 68bc604c65c819b5db9d0c7216d0594f
+Decryption:
+        [0]
+                [WHBox] Duration: 84.986µs,     Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+                [AES] Duration:   358ns,        Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+        [1]
+                [WHBox] Duration: 62.48µs,      Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+                [AES] Duration:   289ns,        Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+        [2]
+                [WHBox] Duration: 63.468µs,     Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+                [AES] Duration:   303ns,        Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+#+end_src
+
+*** chow-aes
+#+begin_src shell
+$ ./whbox-benchmark -action benchmark -alg chow -key '123456789abdeafd123efcb123098aab' -dir /tmp/shm -block 'c03fcc5ca7333a6309e2ed7e5e2870a6'
+Generate key duration: 538.210333ms
+Benchmark: key(123456789abdeafd123efcb123098aab), block(c03fcc5ca7333a6309e2ed7e5e2870a6)
+Encryption:
+        [0]
+                [WHBox] Duration: 46.663µs,     Cipher: 68bc604c65c819b5db9d0c7216d0594f
+                [AES] Duration:   2.392µs,      Cipher: 68bc604c65c819b5db9d0c7216d0594f
+        [1]
+                [WHBox] Duration: 34.906µs,     Cipher: 68bc604c65c819b5db9d0c7216d0594f
+                [AES] Duration:   634ns,        Cipher: 68bc604c65c819b5db9d0c7216d0594f
+        [2]
+                [WHBox] Duration: 26.075µs,     Cipher: 68bc604c65c819b5db9d0c7216d0594f
+                [AES] Duration:   340ns,        Cipher: 68bc604c65c819b5db9d0c7216d0594f
+Decryption:
+        [0]
+                [WHBox] Duration: 37.195µs,     Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+                [AES] Duration:   472ns,        Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+        [1]
+                [WHBox] Duration: 36.691µs,     Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+                [AES] Duration:   530ns,        Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+        [2]
+                [WHBox] Duration: 36.007µs,     Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+                [AES] Duration:   506ns,        Clear: c03fcc5ca7333a6309e2ed7e5e2870a6
+#+end_src
